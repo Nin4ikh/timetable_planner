@@ -1,0 +1,14 @@
+*.pptx
+*.png
+*.csv
+*.log
+*.pkl
+*.xlsx
+*.vsdx
+*.docx
+*.exe
+*.pdf
+.DS_Store
+*.pem
+\__pycache__
+\.idea
