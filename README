@@ -1,0 +1,106 @@
+#Timetable Planner
+
+## objective
+create a course-timeslot-assignation (matrix) based on the defined priorities:
+    - number of maximum courses per day
+    - grouping of courses (e.g. two courses of the same subject on one day must be put after each other)
+and an objective function that maximizes an artificial value (reward) and ensures the non-violation of constraints:
+    - a teacher is capable of teaching a subject in a specific grade
+    - a teacher cannot be at two places at once
+    - a school-class cannot be at two places at once
+    - a student cannot be at two places at once (for the 12/13 grade)
+with the soft constraint:
+    - earlier slots are preferred over later
+
+## Structure
+### example request:
+```yaml
+students:
+    1:
+        name: maximilian
+        grade: 1
+        class_name: a
+    2:
+        name: maria
+        grade: 1
+        class_name: a
+    3:
+        name: maria
+        grade: 1
+        class_name: b
+    4:
+        name: peter
+        grade: 1
+        class_name: b
+teachers:
+    1:
+        name: Mr. Thompson
+        subjects:
+            maths:
+                grades: [1, 2]
+            english:
+                grades: [1, 2]
+    2:
+        name: Mrs. Thompson
+        subjects:
+            maths:
+                grades: [1, 2]
+            spanish:
+                grades: [1, 2]
+
+nr_of_courses_each_week_per_subject_per_schoolclass:
+    1a:
+        grade: 1
+        class_name: a
+        subjects:
+            maths: 5
+            english: 5
+            spanish: 2
+    1b:
+        grade: 1
+        class_name: a
+        subjects:
+            maths: 4
+            english: 5
+            spanish: 3
+grouping: 2
+timeslots:
+    mon: 5
+    tue: 5
+    wed: 3
+    thu: 5
+    fri: 3
+```
+
+### expected result
+```yaml
+1a:
+    grade: 1
+    class_name: a
+    timetable:
+        mon:
+            1:
+                subject: maths
+                teacher: Mr. Thompson
+            2:
+                subject: english
+                teacher: Mr. Thompson
+            3:
+                subject: spanish
+                teacher: Mrs. Thompson
+        tue: ...
+    grade: 1
+    class_name: b
+    timetable:
+        mon:
+            1:
+                subject: maths
+                teacher: Mrs. Thompson
+            2:
+                subject: spanish
+                teacher: Mrs. Thompson
+            3:
+                subject: english
+                teacher: Mr. Thompson
+        tue: ...
+```
